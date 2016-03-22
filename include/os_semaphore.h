@@ -117,3 +117,7 @@ void os_semDelete(os_semHandle_t handle);
 #endif
 
 #endif /* OS_SEMAPHORE_H */
+
+/**
+ *@}
+ **/
