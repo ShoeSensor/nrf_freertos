@@ -36,6 +36,10 @@
 extern "C" {
 #endif
 
+
+typedef void(*os_timerCallback_t)(void*);
+typedef struct os_threadHandle *os_threadHandle_t;
+
 typedef enum {
     THREAD_PRIO_LOW = 0,    /**< Lowest thread priority*/
     THREAD_PRIO_NORM,       /**< Normal thread priority*/
@@ -44,14 +48,11 @@ typedef enum {
 
 typedef struct {
     const char* name;                   /**< Name of the thread*/
-    os_threadCallback_t threadCallback; /**< Code to execute in the thread*/
+    os_timerCallback_t threadCallback; /**< Code to execute in the thread*/
     void* threadArgs;                   /**< Arguments to pass to the thread callback*/
     uint32_t stackSize;                 /**< Amount of stack memory the thread may use*/
     os_threadPriorities_t priority;     /**< The thread priority for the scheduler*/
 } os_threadConfig_t;
-
-typedef void(*os_threadCallback_t)(void*);
-typedef struct os_threadHandle *os_threadHandle_t;
 
 /**
  * @brief Create and deploy a new thread. The thread will not run until
@@ -98,6 +99,22 @@ bool os_threadPause(os_threadHandle_t handle);
  * @retval  false If the thread could not be resumed.
  */
 bool os_threadResume(os_threadHandle_t handle);
+
+/**
+ * @brief Test if a thread is running.
+ * @param handle Handle to the thread to test.
+ * @retval true If the thread is currently running.
+ * @retval false If the thread is currently not running.
+ */
+bool os_threadIsRunning(os_threadHandle_t handle);
+
+/**
+ * @brief Test if a thread is paused.
+ * @param handle Handle to the thread to test.
+ * @retval  true If the thread is paused.
+ * @retval  false If the thread is not paused.
+ */
+bool os_threadIsPaused(os_threadHandle_t handle);
 
 /**
  * @brief Exit a thread.

@@ -13,3 +13,57 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+#include "os_mutex.h"
+#include "FreeRTOS.h"
+#include "semphr.h"
+#include "task.h"
+#include "core_cm0.h" // fix eclipse warning
+
+os_mutexHandle_t os_mutexNew(void)
+{
+    return xSemaphoreCreateMutex();
+}
+
+bool os_mutexLock(os_mutexHandle_t handle)
+{
+    return xSemaphoreTake(handle, portMAX_DELAY);
+}
+
+bool os_mutexTryLock(os_mutexHandle_t handle)
+{
+    return xSemaphoreTake(handle, 0);
+}
+
+bool os_mutexTimedLock(os_mutexHandle_t handle, uint32_t timeout)
+{
+    return xSemaphoreTake(handle, timeout);
+}
+
+bool os_mutexIsrLock(os_mutexHandle_t handle)
+{
+    bool hasWoken = false;
+    bool ret = false;
+    ret = xSemaphoreTakeFromISR(handle, (BaseType_t *)&hasWoken);
+    portYIELD_FROM_ISR(hasWoken);
+    return ret;
+}
+
+void os_mutexUnlock(os_mutexHandle_t handle)
+{
+    (void)xSemaphoreGive(handle);
+}
+
+bool os_mutexIsrUnLock(os_mutexHandle_t handle)
+{
+    bool hasWoken = false;
+    bool ret = false;
+    ret = xSemaphoreGiveFromISR(handle, (BaseType_t *)&hasWoken);
+    portYIELD_FROM_ISR(hasWoken);
+    return ret;
+}
+
+void os_mutexDelete(os_mutexHandle_t handle)
+{
+    vSemaphoreDelete(handle);
+}

@@ -29,8 +29,11 @@
 #include "sdk_errors.h"
 #include "app_error.h"
 
+#include "os_mutex.h"
+
 int main(void)
 {
+    os_mutexNew();
     while (1) {
 
     }

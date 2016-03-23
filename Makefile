@@ -40,7 +40,11 @@ remduplicates = $(strip $(if $1,$(firstword $1) $(call remduplicates,$(filter-ou
 #Project specific files 
 INC_PATHS  += -I$(abspath $(PROJ_HOME)/config)
 INC_PATHS  += -I$(abspath $(PROJ_HOME)/include)
-C_SOURCE_FILES += $(abspath $(PROJ_HOME)/$(wildcard *.c))
+C_SOURCE_FILES += $(abspath $(PROJ_HOME)/main.c)
+C_SOURCE_FILES += $(abspath $(PROJ_HOME)/src/os_mutex.c)
+C_SOURCE_FILES += $(abspath $(PROJ_HOME)/src/os_thread.c)
+C_SOURCE_FILES += $(abspath $(PROJ_HOME)/src/os_semaphore.c)
+C_SOURCE_FILES += $(abspath $(PROJ_HOME)/src/os_timer.c)
 
 
 #source common to all targets
@@ -100,7 +104,7 @@ CFLAGS += -DBOARD_PCA10028
 CFLAGS += -DBSP_DEFINES_ONLY
 CFLAGS += -mcpu=cortex-m0
 CFLAGS += -mthumb -mabi=aapcs --std=gnu99
-CFLAGS += -Wall -Werror -Os
+CFLAGS += -Wall -Os -Werror
 CFLAGS += -mfloat-abi=soft
 # keep every function in separate section. This will allow linker to dump unused functions
 CFLAGS += -ffunction-sections -fdata-sections -fno-strict-aliasing

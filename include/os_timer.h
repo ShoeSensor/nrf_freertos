@@ -34,15 +34,15 @@
 extern "C" {
 #endif
 
+typedef void(*os_timerCallback_t)(void *);
+typedef struct os_timerHandle *os_timerHandle_t;
+
 typedef struct {
     const char* name;               /**< Name of the timer task*/
     uint32_t period;                /**< Period of the task execution*/
     bool oneShot;                   /**< Whether the task should be executed once*/
-    os_threadCallback_t callback;   /**< Function to call when the timer expires*/
+    os_timerCallback_t callback;    /**< Function to call when the timer expires*/
 } os_timerConfig_t;
-
-typedef void(*os_threadCallback_t)(void);
-typedef struct os_timerHandle *os_timerHandle_t;
 
 /**
  * @brief Get the system time from the scheduler.
@@ -81,11 +81,12 @@ void os_timerDelay(uint32_t ms);
  * @details Creates a software timer that calls a callback every time it
  * expires.
  * @param conf Configuration for the timer task.
+ * @param initDelay Initial delay before the task is executed.
  * @return A handle to timer task. If the timer task could not be created,
  * NULL is returned.
  * @note This function uses dynamic memory allocation.
  */
-os_timerHandle_t os_timerTaskNew(os_timerConfig_t *conf);
+os_timerHandle_t os_timerTaskNew(os_timerConfig_t *conf, uint16_t initDelay);
 
 /**
  * @brief Stop a timer task.

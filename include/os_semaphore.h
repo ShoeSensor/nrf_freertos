@@ -27,6 +27,10 @@
 #define OS_SEMAPHORE_H
 
 #include <stdint.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include "FreeRTOS.h"
+#include "semphr.h"
 
 #ifdef  __cplusplus
 extern "C" {

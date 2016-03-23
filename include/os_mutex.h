@@ -23,6 +23,9 @@
  *
  */
 
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdlib.h>
 #include "FreeRTOS.h"
 #include "semphr.h"
 

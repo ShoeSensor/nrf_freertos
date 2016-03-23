@@ -13,3 +13,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+#include "os_semaphore.h"
+
+#include "FreeRTOS.h"
+#include "semphr.h"
+#include "task.h"
+#include "core_cm0.h" // Fix eclipse warning
+
+os_semHandle_t os_semNew(uint8_t initCount, uint8_t maxCount)
+{
+    return xSemaphoreCreateCounting(maxCount, initCount);
+}
+
+bool os_semWait(os_semHandle_t handle)
+{
+    return xSemaphoreTake(handle, portMAX_DELAY);
+}
+
+bool os_semTryWait(os_semHandle_t handle)
+{
+    return xSemaphoreTake(handle, 0);
+}
+
+bool os_semTimedWait(os_semHandle_t handle, uint32_t timeout)
+{
+    return xSemaphoreTake(handle, timeout);
+}
+
+bool os_semIsrWait(os_semHandle_t handle)
+{
+    bool hasWoken = false;
+    bool ret = false;
+    ret = xSemaphoreTakeFromISR(handle, (BaseType_t *)&hasWoken);
+    portYIELD_FROM_ISR(hasWoken);
+    return ret;
+}
+
+void os_semPost(os_semHandle_t handle)
+{
+    (void)xSemaphoreGive(handle);
+}
+
+bool os_semIsrPost(os_semHandle_t handle)
+{
+    bool hasWoken = false;
+    bool ret = false;
+    ret = xSemaphoreGiveFromISR(handle, (BaseType_t *)&hasWoken);
+    portYIELD_FROM_ISR(hasWoken);
+    return ret;
+}
+
+void os_semDelete(os_semHandle_t handle)
+{
+    vSemaphoreDelete(handle);
+}
