@@ -1,9 +1,8 @@
 PROJECT_NAME := $(shell basename $(CURDIR))
 
 export OUTPUT_FILENAME
-#MAKEFILE_NAME := $(CURDIR)/$(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 MAKEFILE_NAME := $(MAKEFILE_LIST)
-MAKEFILE_DIR := $(dir $(MAKEFILE_NAME) ) 
+MAKEFILE_DIR := $(dir $(MAKEFILE_NAME))
 SDK_ROOT := $(shell echo $$SDK_ROOT)
 PROJ_HOME := $(SDK_ROOT)/apps/$(PROJECT_NAME)
 
@@ -37,25 +36,27 @@ SIZE            := '$(GNU_INSTALL_ROOT)/bin/$(GNU_PREFIX)-size'
 #function for removing duplicates in a list
 remduplicates = $(strip $(if $1,$(firstword $1) $(call remduplicates,$(filter-out $(firstword $1),$1))))
 
+#Test support
+
+ifeq ("$(TEST)","1")
+C_SOURCE_FILES += $(abspath $(PROJ_HOME)/tests/threadtest.c)
+else
+C_SOURCE_FILES += $(abspath $(PROJ_HOME)/main.c)
+endif
+
 #Project specific files 
 INC_PATHS  += -I$(abspath $(PROJ_HOME)/config)
 INC_PATHS  += -I$(abspath $(PROJ_HOME)/include)
-C_SOURCE_FILES += $(abspath $(PROJ_HOME)/main.c)
 C_SOURCE_FILES += $(abspath $(PROJ_HOME)/src/os_mutex.c)
 C_SOURCE_FILES += $(abspath $(PROJ_HOME)/src/os_thread.c)
 C_SOURCE_FILES += $(abspath $(PROJ_HOME)/src/os_semaphore.c)
 C_SOURCE_FILES += $(abspath $(PROJ_HOME)/src/os_timer.c)
 
+
 #source common to all targets
 C_SOURCE_FILES += \
-$(abspath $(SDK_ROOT)/components/libraries/button/app_button.c) \
 $(abspath $(SDK_ROOT)/components/libraries/util/app_error.c) \
-$(abspath $(SDK_ROOT)/components/libraries/fifo/app_fifo.c) \
-$(abspath $(SDK_ROOT)/components/libraries/timer/app_timer_freertos.c) \
-$(abspath $(SDK_ROOT)/components/libraries/trace/app_trace.c) \
 $(abspath $(SDK_ROOT)/components/libraries/util/nrf_assert.c) \
-$(abspath $(SDK_ROOT)/components/libraries/uart/retarget.c) \
-$(abspath $(SDK_ROOT)/components/libraries/sensorsim/sensorsim.c) \
 $(abspath $(SDK_ROOT)/external/freertos/source/croutine.c) \
 $(abspath $(SDK_ROOT)/external/freertos/source/event_groups.c) \
 $(abspath $(SDK_ROOT)/external/freertos/source/portable/MemMang/heap_1.c) \
@@ -66,61 +67,28 @@ $(abspath $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf51/port_cmsis_systick.
 $(abspath $(SDK_ROOT)/external/freertos/source/queue.c) \
 $(abspath $(SDK_ROOT)/external/freertos/source/tasks.c) \
 $(abspath $(SDK_ROOT)/external/freertos/source/timers.c) \
-$(abspath $(SDK_ROOT)/components/libraries/uart/app_uart_fifo.c) \
-$(abspath $(SDK_ROOT)/components/drivers_nrf/delay/nrf_delay.c) \
 $(abspath $(SDK_ROOT)/components/drivers_nrf/clock/nrf_drv_clock.c) \
 $(abspath $(SDK_ROOT)/components/drivers_nrf/common/nrf_drv_common.c) \
-$(abspath $(SDK_ROOT)/components/drivers_nrf/gpiote/nrf_drv_gpiote.c) \
-$(abspath $(SDK_ROOT)/components/drivers_nrf/uart/nrf_drv_uart.c) \
-$(abspath $(SDK_ROOT)/components/drivers_nrf/pstorage/pstorage.c) \
-$(abspath $(SDK_ROOT)/examples/bsp/bsp.c) \
-$(abspath $(SDK_ROOT)/bsp/bsp_btn_ble.c) \
-$(abspath $(SDK_ROOT)/components/ble/common/ble_advdata.c) \
-$(abspath $(SDK_ROOT)/components/ble/ble_advertising/ble_advertising.c) \
-$(abspath $(SDK_ROOT)/components/ble/ble_services/ble_bas/ble_bas.c) \
-$(abspath $(SDK_ROOT)/components/ble/common/ble_conn_params.c) \
-$(abspath $(SDK_ROOT)/components/ble/ble_services/ble_dis/ble_dis.c) \
-$(abspath $(SDK_ROOT)/components/ble/ble_services/ble_hrs/ble_hrs.c) \
-$(abspath $(SDK_ROOT)/components/ble/common/ble_srv_common.c) \
-$(abspath $(SDK_ROOT)/components/ble/device_manager/device_manager_peripheral.c) \
 $(abspath $(SDK_ROOT)/components/toolchain/system_nrf51.c) \
-$(abspath $(SDK_ROOT)/components/softdevice/common/softdevice_handler/softdevice_handler.c) \
 
 #assembly files common to all targets
 ASM_SOURCE_FILES  = $(abspath $(SDK_ROOT)/components/toolchain/gcc/gcc_startup_nrf51.s)
 
 #includes common to all targets
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/config)
 INC_PATHS += -I$(abspath $(SDK_ROOT)/examples/bsp)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/libraries/fifo)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/delay)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/external/freertos/source/include)
 INC_PATHS += -I$(abspath $(SDK_ROOT)/external/freertos/config)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/libraries/util)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/ble/device_manager)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/uart)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/ble/common)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/libraries/sensorsim)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/pstorage)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/ble/ble_services/ble_dis)
+INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd)
 INC_PATHS += -I$(abspath $(SDK_ROOT)/components/device)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/libraries/uart)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/libraries/button)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/libraries/timer)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf51)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/softdevice/s110/headers)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/gpiote)
 INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/hal)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/toolchain/gcc)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/toolchain)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/common)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/ble/ble_advertising)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/clock)
 INC_PATHS += -I$(abspath $(SDK_ROOT)/external/freertos/portable/GCC/nrf51)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/libraries/trace)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/ble/ble_services/ble_bas)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/softdevice/common/softdevice_handler)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/components/ble/ble_services/ble_hrs)
+INC_PATHS += -I$(abspath $(SDK_ROOT)/components/libraries/util)
+INC_PATHS += -I$(abspath $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf51)
+INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/common)
+INC_PATHS += -I$(abspath $(SDK_ROOT)/components/toolchain)
+INC_PATHS += -I$(abspath $(SDK_ROOT)/external/freertos/source/include)
+INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/config)
+INC_PATHS += -I$(abspath $(SDK_ROOT)/components/toolchain/gcc)
+INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/clock)
 
 OBJECT_DIRECTORY = _build
 LISTING_DIRECTORY = $(OBJECT_DIRECTORY)
@@ -130,24 +98,19 @@ OUTPUT_BINARY_DIRECTORY = $(OBJECT_DIRECTORY)
 BUILD_DIRECTORIES := $(sort $(OBJECT_DIRECTORY) $(OUTPUT_BINARY_DIRECTORY) $(LISTING_DIRECTORY) )
 
 ifeq ("$(DEBUG)","1")
-    CFLAGS = -DDEBUG -g3
+    CFLAGS = -DDEBUG -g3 -O0
 else
-    CFLAGS = -DNDEBUG
+    CFLAGS = -DNDEBUG -Werror -Os
 endif
 
-
 #flags common to all targets
-CFLAGS  = -D__STACK_SIZE=2048
 CFLAGS += -DNRF51
-CFLAGS += -DS110
-CFLAGS += -D__HEAP_SIZE=1024
-CFLAGS += -DBOARD_PCA10028
 CFLAGS += -DFREERTOS
-CFLAGS += -DBLE_STACK_SUPPORT_REQD
-CFLAGS += -DSOFTDEVICE_PRESENT
+CFLAGS += -DBOARD_PCA10028
+CFLAGS += -DBSP_DEFINES_ONLY
 CFLAGS += -mcpu=cortex-m0
 CFLAGS += -mthumb -mabi=aapcs --std=gnu99
-CFLAGS += -Wall -Werror -Os
+CFLAGS += -Wall
 CFLAGS += -mfloat-abi=soft
 # keep every function in separate section. This will allow linker to dump unused functions
 CFLAGS += -ffunction-sections -fdata-sections -fno-strict-aliasing
@@ -164,27 +127,25 @@ LDFLAGS += --specs=nano.specs -lc -lnosys
 
 # Assembler flags
 ASMFLAGS += -x assembler-with-cpp
-ASMFLAGS += -D__STACK_SIZE=2048
-ASMFLAGS += -DNRF51
-ASMFLAGS += -DS110
-ASMFLAGS += -D__HEAP_SIZE=1024
 ASMFLAGS += -DBOARD_PCA10028
-ASMFLAGS += -DFREERTOS
-ASMFLAGS += -DBLE_STACK_SUPPORT_REQD
 ASMFLAGS += -DSOFTDEVICE_PRESENT
+ASMFLAGS += -DNRF51
+ASMFLAGS += -DFREERTOS
+ASMFLAGS += -DBOARD_PCA10028
+ASMFLAGS += -DBSP_DEFINES_ONLY
 #default target - first one defined
-default: clean nrf51422_xxac_s110
+default: clean nrf51422_xxac
 
 #building all targets
+
 all: clean
 	$(NO_ECHO)$(MAKE) -f $(MAKEFILE_NAME) -C $(MAKEFILE_DIR) -e cleanobj
-	$(NO_ECHO)$(MAKE) -f $(MAKEFILE_NAME) -C $(MAKEFILE_DIR) -e nrf51422_xxac_s110
+	$(NO_ECHO)$(MAKE) -f $(MAKEFILE_NAME) -C $(MAKEFILE_DIR) -e nrf51422_xxac
 
 #target for printing all targets
 help:
 	@echo following targets are available:
-	@echo 	nrf51422_xxac_s110
-	@echo 	flash_softdevice
+	@echo 	nrf51422_xxac
 
 
 C_SOURCE_FILE_NAMES = $(notdir $(C_SOURCE_FILES))
@@ -200,9 +161,9 @@ vpath %.s $(ASM_PATHS)
 
 OBJECTS = $(C_OBJECTS) $(ASM_OBJECTS)
 
-nrf51422_xxac_s110: OUTPUT_FILENAME := nrf51422_xxac_s110
-nrf51422_xxac_s110: LINKER_SCRIPT=config/ble_freertos_gcc_nrf51.ld
-nrf51422_xxac_s110: $(BUILD_DIRECTORIES) $(OBJECTS)
+nrf51422_xxac: OUTPUT_FILENAME := nrf51422_xxac
+nrf51422_xxac: LINKER_SCRIPT=config/blinky_FreeRTOS_gcc_nrf51.ld
+nrf51422_xxac: $(BUILD_DIRECTORIES) $(OBJECTS)
 	@echo Linking target: $(OUTPUT_FILENAME).out
 	$(NO_ECHO)$(CC) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $(OUTPUT_BINARY_DIRECTORY)/$(OUTPUT_FILENAME).out
 	$(NO_ECHO)$(MAKE) -f $(MAKEFILE_NAME) -C $(MAKEFILE_DIR) -e finalize
@@ -263,7 +224,7 @@ cleanobj:
 
 flash: $(MAKECMDGOALS)
 	@echo Flashing: $(OUTPUT_BINARY_DIRECTORY)/$<.hex
-	nrfjprog --program $(OUTPUT_BINARY_DIRECTORY)/$<.hex -f nrf51  --sectorerase
+	nrfjprog --program $(OUTPUT_BINARY_DIRECTORY)/$<.hex -f nrf51  --chiperase
 	nrfjprog --reset
 
 ## Flash softdevice

@@ -37,7 +37,7 @@ extern "C" {
 #endif
 
 
-typedef void(*os_timerCallback_t)(void*);
+typedef void(*os_threadCallback_t)(void*);
 typedef struct os_threadHandle *os_threadHandle_t;
 
 typedef enum {
@@ -48,7 +48,7 @@ typedef enum {
 
 typedef struct {
     const char* name;                   /**< Name of the thread*/
-    os_timerCallback_t threadCallback; /**< Code to execute in the thread*/
+    os_threadCallback_t threadCallback; /**< Code to execute in the thread*/
     void* threadArgs;                   /**< Arguments to pass to the thread callback*/
     uint32_t stackSize;                 /**< Amount of stack memory the thread may use*/
     os_threadPriorities_t priority;     /**< The thread priority for the scheduler*/
