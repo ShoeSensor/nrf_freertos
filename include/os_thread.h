@@ -61,7 +61,7 @@ typedef struct os_threadHandle *os_threadHandle_t;
  * NULL is returned.
  * @note    This function uses dynamic memory allocation
  */
-os_threadHandle_t *os_threadNew(os_threadConfig_t *conf);
+os_threadHandle_t os_threadNew(os_threadConfig_t *conf);
 
 /**
  * @brief Start the OS task scheduler. This will cause the created threads to run.

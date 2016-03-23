@@ -26,6 +26,8 @@
 #ifndef OS_SEMAPHORE_H
 #define OS_SEMAPHORE_H
 
+#include <stdint.h>
+
 #ifdef  __cplusplus
 extern "C" {
 #endif
@@ -41,10 +43,11 @@ typedef SemaphoreHandle_t os_semHandle_t;
  * @brief Create a new semaphore object
  * @details Creates a semaphore object and a handle to it later
  * used for waiting/posting.
- * @param conf Configuration for the semaphore object.
+ * @param initCount The initial count value of the semaphore.
+ * @param maxCount The maximum count value of the semaphore.
  * @return Handle to the new semaphore object.
  */
-os_semHandle_t os_semNew(os_semConfig_t *conf);
+os_semHandle_t os_semNew(uint8_t initCount, uint8_t maxCount);
 
 /**
  * @brief Decrement the value of a semaphore.
