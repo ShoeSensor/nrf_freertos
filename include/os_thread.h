@@ -36,9 +36,14 @@
 extern "C" {
 #endif
 
-
 typedef void(*os_threadCallback_t)(void*);
 typedef struct os_threadHandle *os_threadHandle_t;
+
+typedef enum {
+    STACK_SIZE_MINIMUM = 100,   /**< Minimum stacksize*/
+    STACK_SIZE_DEFAULT = 150,   /**< Stack size for regular threads*/
+    STACK_SIZE_BIG = 256        /**< Stack size for big threads*/
+} os_stackSizes_t;
 
 typedef enum {
     THREAD_PRIO_LOW = 0,    /**< Lowest thread priority*/
