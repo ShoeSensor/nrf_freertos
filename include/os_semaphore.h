@@ -37,8 +37,9 @@ extern "C" {
 #endif
 
 typedef struct {
-    uint8_t initCount;
-    uint8_t maxCount;
+    uint8_t initCount;      /**<Initial value of a counting semaphore*/
+    uint8_t maxCount;       /**<Maximum value of a counting semaphore*/
+    bool binary;            /**<If the semaphore should be binary or not*/
 } os_semConfig_t;
 
 typedef SemaphoreHandle_t os_semHandle_t;
@@ -47,11 +48,10 @@ typedef SemaphoreHandle_t os_semHandle_t;
  * @brief Create a new semaphore object
  * @details Creates a semaphore object and a handle to it later
  * used for waiting/posting.
- * @param initCount The initial count value of the semaphore.
- * @param maxCount The maximum count value of the semaphore.
+ * @param conf Configuration struct for the new semaphore
  * @return Handle to the new semaphore object.
  */
-os_semHandle_t os_semNew(uint8_t initCount, uint8_t maxCount);
+os_semHandle_t os_semNew(os_semConfig_t *conf);
 
 /**
  * @brief Decrement the value of a semaphore.

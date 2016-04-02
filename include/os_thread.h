@@ -48,7 +48,7 @@ typedef enum {
 typedef enum {
     THREAD_PRIO_LOW = 0,    /**< Lowest thread priority*/
     THREAD_PRIO_NORM,       /**< Normal thread priority*/
-    THREAD_PROI_HIGH        /**< Highest thread priority*/
+    THREAD_PRIO_HIGH        /**< Highest thread priority*/
 } os_threadPriorities_t;
 
 typedef struct {
@@ -134,10 +134,8 @@ void os_threadExit(os_threadHandle_t handle);
  * @details Stop and delete a thread from the memory.
  * DO NOT call this function before os_threadNew.
  * @param handle Handle to the thread that must be deleted.
- * @retval  true If the thread was deleted successfully.
- * @retval  false If the thread could not be deleted.
  */
-bool os_threadDelete(os_threadHandle_t handle);
+void os_threadDelete(os_threadHandle_t handle);
 
 
 #ifdef  __cplusplus

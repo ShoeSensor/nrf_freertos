@@ -42,6 +42,7 @@ typedef struct {
     uint32_t period;                /**< Period of the task execution*/
     bool oneShot;                   /**< Whether the task should be executed once*/
     os_timerCallback_t callback;    /**< Function to call when the timer expires*/
+    bool startLater;                /**< If the timer should start later*/
 } os_timerConfig_t;
 
 /**
@@ -87,6 +88,14 @@ void os_timerDelay(uint32_t ms);
  * @note This function uses dynamic memory allocation.
  */
 os_timerHandle_t os_timerTaskNew(os_timerConfig_t *conf, uint16_t initDelay);
+
+/**
+ * @brief Start a timer task that was previously created but not started.
+ * @param handle Handle to the timertask
+ * @retval  true if the timertask started successfully.
+ * @retval  false if the device is out of memory
+ */
+bool os_timerTaskStart(os_timerHandle_t handle);
 
 /**
  * @brief Stop a timer task.

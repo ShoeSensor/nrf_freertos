@@ -29,6 +29,7 @@
 
 struct os_timerHandle {
     TimerHandle_t timerHandle;
+    uint32_t initDelay;
 };
 
 uint32_t os_timerGetMs(void)
@@ -60,7 +61,7 @@ os_timerHandle_t os_timerTaskNew(os_timerConfig_t* conf, uint16_t initDelay)
             !conf->oneShot,
             NULL,
             conf->callback);
-    if(handle->timerHandle) {
+    if(handle->timerHandle && !conf->startLater) {
         ret = xTimerStart(handle->timerHandle, initDelay);
         if(ret) {
             return handle;
@@ -69,10 +70,20 @@ os_timerHandle_t os_timerTaskNew(os_timerConfig_t* conf, uint16_t initDelay)
             free(handle);
             return NULL;
         }
+    } else if(conf->startLater) {
+        handle->initDelay = initDelay;
+        return handle;
     } else {
         free(handle);
         return NULL;
     }
+}
+
+bool os_timerTaskStart(os_timerHandle_t handle)
+{
+    bool ret;
+    ret = xTimerStart(handle->timerHandle, handle->initDelay);
+    return ret;
 }
 
 bool os_timerTaskStop(os_timerHandle_t handle)

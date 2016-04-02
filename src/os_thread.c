@@ -20,24 +20,22 @@
 
 struct os_threadHandle {
     TaskHandle_t threadHandle;
-    bool isRunning;
-    bool isPaused;
 };
 
 os_threadHandle_t os_threadNew(os_threadConfig_t *conf)
 {
     os_threadHandle_t handle = calloc(1, sizeof(struct os_threadHandle));
-    if(xTaskCreate(conf->threadCallback,
+    bool ret;
+    ret = xTaskCreate(conf->threadCallback,
             conf->name,
             conf->stackSize,
             conf->threadArgs,
             conf->priority,
-            &handle->threadHandle) != pdPASS) {
+            &handle->threadHandle);
+    if(!ret) {
         free(handle);
         return NULL;
     }
-    handle->isPaused = false;
-    handle->isRunning= true;
     return handle;
 }
 
@@ -54,14 +52,12 @@ bool os_threadStop(os_threadHandle_t handle)
 
 bool os_threadPause(os_threadHandle_t handle)
 {
-    handle->isPaused = true;
     vTaskSuspend(handle->threadHandle);
     return true;
 }
 
 bool os_threadResume(os_threadHandle_t handle)
 {
-    handle->isPaused = false;
     vTaskResume(handle->threadHandle);
     return true;
 }
@@ -78,13 +74,11 @@ bool os_threadIsPaused(os_threadHandle_t handle)
 
 void os_threadExit(os_threadHandle_t handle)
 {
-    handle->isRunning = false;
     vTaskDelete(handle->threadHandle);
 }
 
-bool os_threadDelete(os_threadHandle_t handle)
+void os_threadDelete(os_threadHandle_t handle)
 {
     vTaskDelete(handle->threadHandle);
     free(handle);
-    return true;
 }

@@ -21,9 +21,12 @@
 #include "task.h"
 #include "core_cm0.h" // Fix eclipse warning
 
-os_semHandle_t os_semNew(uint8_t initCount, uint8_t maxCount)
+os_semHandle_t os_semNew(os_semConfig_t *conf)
 {
-    return xSemaphoreCreateCounting(maxCount, initCount);
+    if(conf->binary)
+        return xSemaphoreCreateBinary();
+    else
+        return xSemaphoreCreateCounting(conf->maxCount, conf->initCount);
 }
 
 bool os_semWait(os_semHandle_t handle)
