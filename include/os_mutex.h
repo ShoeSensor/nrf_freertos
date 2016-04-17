@@ -15,6 +15,7 @@
  */
 
 /** @file
+ * @defgroup os OSAL
  * @defgroup os_mutex Mutexes
  * @{
  * @ingroup os
@@ -47,21 +48,21 @@ typedef SemaphoreHandle_t os_mutexHandle_t;
 os_mutexHandle_t os_mutexNew(void);
 
 /**
- * @brief Lock a mutex indefinitely. 
+ * @brief Lock a mutex indefinitely.
  * @details Block a mutex without a timeout. This is a blocking function.
  * @param handle Handle to the mutex to lock.
- * @retval  true If the mutex was successfully lock. 
- * @retval  false If the mutex could not be locked.  
+ * @retval  true If the mutex was successfully lock.
+ * @retval  false If the mutex could not be locked.
  */
 bool os_mutexLock(os_mutexHandle_t handle);
 
 /**
  * @brief Try to lock a mutex.
- * @details Non-blocking way of locking a mutex. If it cannot lock, it will 
+ * @details Non-blocking way of locking a mutex. If it cannot lock, it will
  * return immediately.
  * @param handle Handle to the mutex to lock.
  * @retval  true If the mutex was successfully lock.
- * @retval  false If the mutex could not be locked.  
+ * @retval  false If the mutex could not be locked.
  */
 bool os_mutexTryLock(os_mutexHandle_t handle);
 
