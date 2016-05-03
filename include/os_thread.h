@@ -106,6 +106,32 @@ bool os_threadPause(os_threadHandle_t handle);
 bool os_threadResume(os_threadHandle_t handle);
 
 /**
+ * @brief Let a thread sleep until it's been notified by another task.
+ * @details Light weight alternative for (binary) semaphores. This must be
+ * called by the thread that needs to wait.
+ * @return
+ */
+void os_threadWait(void);
+
+/**
+ * @brief Notify a waiting task.
+ * @details Light weight alternative to (binary) semaphores. This wakes up
+ * as task that is currently waiting.
+ * @param handle Handle to the task to notify. Note that the task to notify
+ * needs to be in a waiting state.
+ */
+void os_threadNotify(os_threadHandle_t handle);
+
+/**
+ * @brief Notify a waiting task from an interrupt.
+ * @details Light weight alternative to (binary) semaphores. This wakes up
+ * as task that is currently waiting. This function is interrupt safe.
+ * @param handle Handle to the task to notify. Note that the task to notify
+ * needs to be in a waiting state.
+ */
+void os_threadIsrNotify(os_threadHandle_t handle);
+
+/**
  * @brief Test if a thread is running.
  * @param handle Handle to the thread to test.
  * @retval true If the thread is currently running.
@@ -125,9 +151,9 @@ bool os_threadIsPaused(os_threadHandle_t handle);
  * @brief Exit a thread.
  * @details This function must be called at the end of a thread callback. This
  * ensures that the thread is removed from the memory and schedulers task list.
- * @param handle Handle to the thread that must be exited.
+ * This should be called by the task itself.
  */
-void os_threadExit(os_threadHandle_t handle);
+void os_threadExit();
 
 /**
  * @brief Delete a thread.

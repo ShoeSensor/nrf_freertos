@@ -47,7 +47,7 @@ bool os_semTimedWait(os_semHandle_t handle, uint32_t timeout)
 bool os_semIsrWait(os_semHandle_t handle)
 {
     bool hasWoken = false;
-    bool ret = false;
+    bool ret;
     ret = xSemaphoreTakeFromISR(handle, (BaseType_t *)&hasWoken);
     portYIELD_FROM_ISR(hasWoken);
     return ret;

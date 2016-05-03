@@ -62,6 +62,23 @@ bool os_threadResume(os_threadHandle_t handle)
     return true;
 }
 
+void os_threadWait(void)
+{
+    (void)ulTaskNotifyTake(true, portMAX_DELAY);
+}
+
+void os_threadNotify(os_threadHandle_t handle)
+{
+    (void)xTaskNotifyGive(handle->threadHandle);
+}
+
+void os_threadIsrNotify(os_threadHandle_t handle)
+{
+    bool hasWoken = false;
+    vTaskNotifyGiveFromISR(handle->threadHandle, (BaseType_t *)&hasWoken);
+    portYIELD_FROM_ISR(hasWoken);
+}
+
 bool os_threadIsRunning(os_threadHandle_t handle)
 {
     return (eTaskGetState(handle->threadHandle) == eRunning);

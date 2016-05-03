@@ -62,7 +62,7 @@ uint32_t os_timerGetElapsed(uint32_t start);
 
 /**
  * @brief Test if a certain time had elapsed.
- * @details Test is an amount of time has elapsed since a starting point in 
+ * @details Test is an amount of time has elapsed since a starting point in
  * milliseconds.
  * @param start Start time to use as reference
  * @param amount Amount of time to check.

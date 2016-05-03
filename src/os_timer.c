@@ -81,9 +81,7 @@ os_timerHandle_t os_timerTaskNew(os_timerConfig_t* conf, uint16_t initDelay)
 
 bool os_timerTaskStart(os_timerHandle_t handle)
 {
-    bool ret;
-    ret = xTimerStart(handle->timerHandle, handle->initDelay);
-    return ret;
+    return xTimerStart(handle->timerHandle, handle->initDelay);
 }
 
 bool os_timerTaskStop(os_timerHandle_t handle)
@@ -98,7 +96,7 @@ bool os_timerTaskRestart(os_timerHandle_t handle)
 
 bool os_timerTaskDelete(os_timerHandle_t handle)
 {
-    bool ret = false;
+    bool ret;
     ret = xTimerDelete(handle->timerHandle, 0);
     if(ret)
         free(handle);
