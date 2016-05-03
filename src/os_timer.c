@@ -20,8 +20,8 @@
 #include "timers.h"
 
 #if (configTICK_RATE_HZ != 1000)
-#define ticksToMs(a)    (a * portTICK_RATE_MS)
-#define msToTicks(a)    (a / portTICK_RATE_MS)
+#define ticksToMs(a)    (a * portTICK_PERIOD_MS)
+#define msToTicks(a)    (a / portTICK_PERIOD_MS)
 #else
 #define ticksToMs(a)    a
 #define msToTicks(a)    a
