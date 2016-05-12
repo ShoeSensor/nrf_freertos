@@ -18,7 +18,7 @@ RM := rm -rf
 
 #echo suspend
 ifeq ("$(VERBOSE)","1")
-NO_ECHO := 
+NO_ECHO :=
 else
 NO_ECHO := @
 endif
@@ -44,7 +44,7 @@ else
 C_SOURCE_FILES += $(abspath $(PROJ_HOME)/main.c)
 endif
 
-#Project specific files 
+#Project specific files
 INC_PATHS  += -I$(abspath $(PROJ_HOME)/config)
 INC_PATHS  += -I$(abspath $(PROJ_HOME)/include)
 C_SOURCE_FILES += $(abspath $(PROJ_HOME)/src/os_mutex.c)
@@ -128,7 +128,6 @@ LDFLAGS += --specs=nano.specs -lc -lnosys
 # Assembler flags
 ASMFLAGS += -x assembler-with-cpp
 ASMFLAGS += -DBOARD_PCA10028
-ASMFLAGS += -DSOFTDEVICE_PRESENT
 ASMFLAGS += -DNRF51
 ASMFLAGS += -DFREERTOS
 ASMFLAGS += -DBOARD_PCA10028
@@ -207,7 +206,7 @@ genbin:
 	$(NO_ECHO)$(OBJCOPY) -O binary $(OUTPUT_BINARY_DIRECTORY)/$(OUTPUT_FILENAME).out $(OUTPUT_BINARY_DIRECTORY)/$(OUTPUT_FILENAME).bin
 
 ## Create binary .hex file from the .out file
-genhex: 
+genhex:
 	@echo Preparing: $(OUTPUT_FILENAME).hex
 	$(NO_ECHO)$(OBJCOPY) -O ihex $(OUTPUT_BINARY_DIRECTORY)/$(OUTPUT_FILENAME).out $(OUTPUT_BINARY_DIRECTORY)/$(OUTPUT_FILENAME).hex
 
