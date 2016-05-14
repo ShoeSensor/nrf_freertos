@@ -39,23 +39,23 @@
 #define APP_TIMER_OP_QUEUE_SIZE              4  /**< Size of timer operation queues. */
 #define DEAD_BEEF 0xDEADBEEF
 
-os_threadHandle_t threadHandle;
+//os_threadHandle_t threadHandle;
 os_threadHandle_t threadHandle2;
 os_threadHandle_t threadHandle3;
 os_threadHandle_t threadHandle4;
 os_mutexHandle_t mutex;
 
-static void testThread(void *args)
-{
-    uint32_t time = os_timerGetMs();
-    while(1) {
-        if(os_timerIsElapsed(time, 500)) {
-            nrf_gpio_pin_toggle(LED_1);
-            time = os_timerGetMs();
-        }
-    }
-    os_threadExit(threadHandle);
-}
+//static void testThread(void *args)
+//{
+//    uint32_t time = os_timerGetMs();
+//    while(1) {
+//        if(os_timerIsElapsed(time, 500)) {
+//            nrf_gpio_pin_toggle(LED_1);
+//            time = os_timerGetMs();
+//        }
+//    }
+//    os_threadExit(threadHandle);
+//}
 
 static void testThread2(void *args)
 {
@@ -106,7 +106,7 @@ int main(void)
 {
     uint32_t errCode = 0;
 
-    errCode = nrf_drv_clock_init(NULL);
+    errCode = nrf_drv_clock_init();
     APP_ERROR_CHECK(errCode);
 
     nrf_gpio_cfg_output(BSP_LED_0);
@@ -118,13 +118,13 @@ int main(void)
     nrf_gpio_pin_set(BSP_LED_2);
     nrf_gpio_pin_set(BSP_LED_3);
 
-    os_threadConfig_t threadConfig = {
-        .name = "thread1",
-        .threadCallback = testThread,
-        .threadArgs = NULL,
-        .stackSize = configMINIMAL_STACK_SIZE + 100,
-        .priority = THREAD_PRIO_NORM
-    };
+//    os_threadConfig_t threadConfig = {
+//        .name = "thread1",
+//        .threadCallback = testThread,
+//        .threadArgs = NULL,
+//        .stackSize = configMINIMAL_STACK_SIZE + 100,
+//        .priority = THREAD_PRIO_NORM
+//    };
 
     os_threadConfig_t threadConfig2 = {
         .name = "thread2",

@@ -56,6 +56,7 @@ C_SOURCE_FILES += $(abspath $(PROJ_HOME)/src/os_timer.c)
 #source common to all targets
 C_SOURCE_FILES += \
 $(abspath $(SDK_ROOT)/components/libraries/util/app_error.c) \
+$(abspath $(SDK_ROOT)/components/libraries/util/app_util_platform.c) \
 $(abspath $(SDK_ROOT)/components/libraries/util/nrf_assert.c) \
 $(abspath $(SDK_ROOT)/external/freertos/source/croutine.c) \
 $(abspath $(SDK_ROOT)/external/freertos/source/event_groups.c) \
@@ -89,6 +90,7 @@ INC_PATHS += -I$(abspath $(SDK_ROOT)/external/freertos/source/include)
 INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/config)
 INC_PATHS += -I$(abspath $(SDK_ROOT)/components/toolchain/gcc)
 INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/clock)
+INC_PATHS += -I$(abspath $(SDK_ROOT)/components/toolchain/CMSIS/Include)
 
 OBJECT_DIRECTORY = _build
 LISTING_DIRECTORY = $(OBJECT_DIRECTORY)
