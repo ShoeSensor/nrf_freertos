@@ -18,7 +18,6 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 #include "task.h"
-#include "core_cm0.h" // fix eclipse warning
 
 os_mutexHandle_t os_mutexNew(void)
 {

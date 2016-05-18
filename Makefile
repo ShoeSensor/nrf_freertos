@@ -62,18 +62,18 @@ $(abspath $(SDK_ROOT)/external/freertos/source/croutine.c) \
 $(abspath $(SDK_ROOT)/external/freertos/source/event_groups.c) \
 $(abspath $(SDK_ROOT)/external/freertos/source/portable/MemMang/heap_1.c) \
 $(abspath $(SDK_ROOT)/external/freertos/source/list.c) \
-$(abspath $(SDK_ROOT)/external/freertos/portable/GCC/nrf51/port.c) \
-$(abspath $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf51/port_cmsis.c) \
-$(abspath $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf51/port_cmsis_systick.c) \
+$(abspath $(SDK_ROOT)/external/freertos/portable/GCC/nrf52/port.c) \
+$(abspath $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf52/port_cmsis.c) \
+$(abspath $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf52/port_cmsis_systick.c) \
 $(abspath $(SDK_ROOT)/external/freertos/source/queue.c) \
 $(abspath $(SDK_ROOT)/external/freertos/source/tasks.c) \
 $(abspath $(SDK_ROOT)/external/freertos/source/timers.c) \
 $(abspath $(SDK_ROOT)/components/drivers_nrf/clock/nrf_drv_clock.c) \
 $(abspath $(SDK_ROOT)/components/drivers_nrf/common/nrf_drv_common.c) \
-$(abspath $(SDK_ROOT)/components/toolchain/system_nrf51.c) \
+$(abspath $(SDK_ROOT)/components/toolchain/system_nrf52.c) \
 
 #assembly files common to all targets
-ASM_SOURCE_FILES  = $(abspath $(SDK_ROOT)/components/toolchain/gcc/gcc_startup_nrf51.s)
+ASM_SOURCE_FILES  = $(abspath $(SDK_ROOT)/components/toolchain/gcc/gcc_startup_nrf52.s)
 
 #includes common to all targets
 INC_PATHS += -I$(abspath $(SDK_ROOT)/examples/bsp)
@@ -81,9 +81,9 @@ INC_PATHS += -I$(abspath $(SDK_ROOT)/external/freertos/config)
 INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd)
 INC_PATHS += -I$(abspath $(SDK_ROOT)/components/device)
 INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/hal)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/external/freertos/portable/GCC/nrf51)
+INC_PATHS += -I$(abspath $(SDK_ROOT)/external/freertos/portable/GCC/nrf52)
 INC_PATHS += -I$(abspath $(SDK_ROOT)/components/libraries/util)
-INC_PATHS += -I$(abspath $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf51)
+INC_PATHS += -I$(abspath $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf52)
 INC_PATHS += -I$(abspath $(SDK_ROOT)/components/drivers_nrf/common)
 INC_PATHS += -I$(abspath $(SDK_ROOT)/components/toolchain)
 INC_PATHS += -I$(abspath $(SDK_ROOT)/external/freertos/source/include)
@@ -106,22 +106,37 @@ else
 endif
 
 #flags common to all targets
-CFLAGS += -DNRF51
+CFLAGS  = -DNRF52_PAN_12
+CFLAGS += -DNRF52_PAN_15
+CFLAGS += -DNRF52_PAN_58
 CFLAGS += -DFREERTOS
-CFLAGS += -DBOARD_PCA10028
+CFLAGS += -DNRF52_PAN_20
+CFLAGS += -DNRF52_PAN_54
+CFLAGS += -DNRF52_PAN_31
+CFLAGS += -DNRF52_PAN_30
+CFLAGS += -DNRF52_PAN_51
+CFLAGS += -DNRF52_PAN_36
+CFLAGS += -DNRF52_PAN_53
+CFLAGS += -DCONFIG_GPIO_AS_PINRESET
+CFLAGS += -DNRF52_PAN_64
+CFLAGS += -DNRF52_PAN_55
+CFLAGS += -DNRF52_PAN_62
+CFLAGS += -DNRF52_PAN_63
+CFLAGS += -DBOARD_PCA10040
+CFLAGS += -DNRF52
 CFLAGS += -DBSP_DEFINES_ONLY
-CFLAGS += -mcpu=cortex-m0
+CFLAGS += -mcpu=cortex-m4
 CFLAGS += -mthumb -mabi=aapcs --std=gnu99
-CFLAGS += -Wall
-CFLAGS += -mfloat-abi=soft
+CFLAGS += -Wall -Werror -O3 -g3
+CFLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
 # keep every function in separate section. This will allow linker to dump unused functions
 CFLAGS += -ffunction-sections -fdata-sections -fno-strict-aliasing
 CFLAGS += -fno-builtin --short-enums
-
 # keep every function in separate section. This will allow linker to dump unused functions
 LDFLAGS += -Xlinker -Map=$(LISTING_DIRECTORY)/$(OUTPUT_FILENAME).map
 LDFLAGS += -mthumb -mabi=aapcs -L $(TEMPLATE_PATH) -T$(LINKER_SCRIPT)
-LDFLAGS += -mcpu=cortex-m0
+LDFLAGS += -mcpu=cortex-m4
+LDFLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
 # let linker to dump unused sections
 LDFLAGS += -Wl,--gc-sections
 # use newlib in nano version
@@ -129,24 +144,38 @@ LDFLAGS += --specs=nano.specs -lc -lnosys
 
 # Assembler flags
 ASMFLAGS += -x assembler-with-cpp
-ASMFLAGS += -DBOARD_PCA10028
-ASMFLAGS += -DNRF51
+ASMFLAGS += -DNRF52_PAN_12
+ASMFLAGS += -DNRF52_PAN_15
+ASMFLAGS += -DNRF52_PAN_58
 ASMFLAGS += -DFREERTOS
-ASMFLAGS += -DBOARD_PCA10028
+ASMFLAGS += -DNRF52_PAN_20
+ASMFLAGS += -DNRF52_PAN_54
+ASMFLAGS += -DNRF52_PAN_31
+ASMFLAGS += -DNRF52_PAN_30
+ASMFLAGS += -DNRF52_PAN_51
+ASMFLAGS += -DNRF52_PAN_36
+ASMFLAGS += -DNRF52_PAN_53
+ASMFLAGS += -DCONFIG_GPIO_AS_PINRESET
+ASMFLAGS += -DNRF52_PAN_64
+ASMFLAGS += -DNRF52_PAN_55
+ASMFLAGS += -DNRF52_PAN_62
+ASMFLAGS += -DNRF52_PAN_63
+ASMFLAGS += -DBOARD_PCA10040
+ASMFLAGS += -DNRF52
 ASMFLAGS += -DBSP_DEFINES_ONLY
 #default target - first one defined
-default: clean nrf51422_xxac
+default: clean nrf52422_xxac
 
 #building all targets
 
 all: clean
 	$(NO_ECHO)$(MAKE) -f $(MAKEFILE_NAME) -C $(MAKEFILE_DIR) -e cleanobj
-	$(NO_ECHO)$(MAKE) -f $(MAKEFILE_NAME) -C $(MAKEFILE_DIR) -e nrf51422_xxac
+	$(NO_ECHO)$(MAKE) -f $(MAKEFILE_NAME) -C $(MAKEFILE_DIR) -e nrf52422_xxac
 
 #target for printing all targets
 help:
 	@echo following targets are available:
-	@echo 	nrf51422_xxac
+	@echo 	nrf52422_xxac
 
 
 C_SOURCE_FILE_NAMES = $(notdir $(C_SOURCE_FILES))
@@ -162,9 +191,9 @@ vpath %.s $(ASM_PATHS)
 
 OBJECTS = $(C_OBJECTS) $(ASM_OBJECTS)
 
-nrf51422_xxac: OUTPUT_FILENAME := nrf51422_xxac
-nrf51422_xxac: LINKER_SCRIPT=config/blinky_FreeRTOS_gcc_nrf51.ld
-nrf51422_xxac: $(BUILD_DIRECTORIES) $(OBJECTS)
+nrf52422_xxac: OUTPUT_FILENAME := nrf52422_xxac
+nrf52422_xxac: LINKER_SCRIPT=config/blinky_FreeRTOS_gcc_nrf52.ld
+nrf52422_xxac: $(BUILD_DIRECTORIES) $(OBJECTS)
 	@echo Linking target: $(OUTPUT_FILENAME).out
 	$(NO_ECHO)$(CC) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $(OUTPUT_BINARY_DIRECTORY)/$(OUTPUT_FILENAME).out
 	$(NO_ECHO)$(MAKE) -f $(MAKEFILE_NAME) -C $(MAKEFILE_DIR) -e finalize
@@ -225,11 +254,11 @@ cleanobj:
 
 flash: $(MAKECMDGOALS)
 	@echo Flashing: $(OUTPUT_BINARY_DIRECTORY)/$<.hex
-	nrfjprog --program $(OUTPUT_BINARY_DIRECTORY)/$<.hex -f nrf51  --chiperase
+	nrfjprog --program $(OUTPUT_BINARY_DIRECTORY)/$<.hex -f nrf52  --chiperase
 	nrfjprog --reset
 
 ## Flash softdevice
 flash_softdevice:
-	@echo Flashing: s110_nrf51_8.0.0_softdevice.hex
-	nrfjprog --program $(SDK_ROOT)/components/softdevice/s110/hex/s110_nrf51_8.0.0_softdevice.hex -f nrf51 --chiperase
+	@echo Flashing: nrf52_8.0.0_softdevice.hex
+	nrfjprog --program $(SDK_ROOT)/components/softdevice/s110/hex/nrf52_8.0.0_softdevice.hex -f nrf52 --chiperase
 	nrfjprog --reset

@@ -19,7 +19,6 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 #include "task.h"
-#include "core_cm0.h" // Fix eclipse warning
 
 os_semHandle_t os_semNew(os_semConfig_t *conf)
 {
